@@ -52,11 +52,11 @@ func main() {
 You can simplify configuration by using environment variables:
 
 ```bash
-export EASYSMTP_SERVER="xxxx.smtp.com" # SMTP server
+export EASYSMTP_SERVER="xxxx.smtp.com" # (optional) SMTP server
 export EASYSMTP_MAIL="xxxx@mail.com" # sender mail address
 export ESSYSMTP_NAME= "xxxx" # your name
 export EASYSMTP_PASSWD="xxxx" # App password or SMTP auth password
-export EASYSMTP_RECIPIENT_MAIL="xxxx@mail.com" # recipient mail address
+export EASYSMTP_RECIPIENT_MAIL="xxxx@mail.com" # (optional) recipient mail address
 export EASYSMTP_ENABLE_HTML=enable # (optional) enable html grammar, default false
 ```
 
