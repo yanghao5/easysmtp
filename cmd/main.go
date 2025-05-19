@@ -1,8 +1,8 @@
 package main
 
 import (
-	"easysmtp"
-	"easysmtp/common/conf"
+	"github.com/yonomesh/easysmtp"
+	"github.com/yonomesh/easysmtp/common/conf"
 )
 
 // It is a test

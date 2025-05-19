@@ -1,12 +1,13 @@
 package easysmtp
 
 import (
-	"easysmtp/common/conf"
-	"easysmtp/common/validator"
-	"easysmtp/internal"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/yonomesh/easysmtp/common/conf"
+	"github.com/yonomesh/easysmtp/common/validator"
+	"github.com/yonomesh/easysmtp/internal"
 
 	netsmtp "net/smtp"
 )
