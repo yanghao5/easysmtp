@@ -115,6 +115,45 @@ func Gmail(recipient string, cc []string, subject string, msg string) (err error
 	return nil
 }
 
+func Outlook(recipient string, cc []string, msg string, subject string) (err error) {
+	config := conf.Config{
+		SmtpServer: "smtp.office365.com",
+		Sender:     os.Getenv("EASYSMTP_MAIL"),
+		Name:       os.Getenv("EASYSMTP_NAME"),
+		Passwd:     os.Getenv("EASYSMTP_PASSWD"),
+		Recipient:  recipient,
+		CC:         cc,
+		Subject:    subject,
+		Msg:        msg,
+		EnableHTML: os.Getenv("EASYSMTP_ENABLE_HTML") == "true",
+	}
+
+	if config.Sender == "" || config.Name == "" || config.Passwd == "" || config.Recipient == "" {
+		return fmt.Errorf("missing required SMTP configuration environment variables")
+	}
+	if !validator.IsValidEmail(config.Sender) {
+		return fmt.Errorf("sender mail error")
+	}
+
+	if !validator.IsEmailFromProvider(config.Sender, "outlook") {
+		return fmt.Errorf("sender mail is not outlook")
+	}
+
+	if !validator.IsValidEmail(config.Recipient) {
+		return fmt.Errorf("recipient mail address is error")
+	}
+
+	for _, addr := range config.CC {
+		if !validator.IsValidEmail(addr) {
+			return fmt.Errorf("error Cc mail address")
+		}
+	}
+
+	Send(config)
+
+	return nil
+}
+
 func Send(config conf.Config) (ret string, err error) {
 	// sender
 	sender := ""
