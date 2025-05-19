@@ -39,6 +39,43 @@ func EasySend(msg string) (err error) {
 
 	return nil
 }
+func SendMail(recipient string, cc []string, subject string, msg string) (err error) {
+
+	config := conf.Config{
+		SmtpServer: os.Getenv("EASYSMTP_SERVER"),
+		Sender:     os.Getenv("EASYSMTP_MAIL"),
+		Name:       os.Getenv("EASYSMTP_NAME"),
+		Passwd:     os.Getenv("EASYSMTP_PASSWD"),
+		Recipient:  recipient,
+		CC:         cc,
+		Subject:    subject,
+		Msg:        msg,
+		EnableHTML: os.Getenv("EASYSMTP_ENABLE_HTML") == "true",
+	}
+
+	if config.SmtpServer == "" || config.Sender == "" || config.Passwd == "" || config.Recipient == "" {
+		return fmt.Errorf("missing required SMTP configuration environment variables")
+	}
+
+	if !validator.IsValidEmail(config.Sender) {
+		return fmt.Errorf("sender mail address is error")
+	}
+
+	if !validator.IsValidEmail(config.Recipient) {
+		return fmt.Errorf("recipient mail address is error")
+	}
+
+	for _, addr := range config.CC {
+		if !validator.IsValidEmail(addr) {
+			return fmt.Errorf("error Cc mail address")
+		}
+	}
+
+	Send(config)
+
+	return nil
+}
+
 func Send(config conf.Config) (ret string, err error) {
 	// sender
 	sender := ""
