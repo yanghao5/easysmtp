@@ -1,4 +1,4 @@
-package conf
+package easysmtp
 
 type Config struct {
 	SmtpServer string

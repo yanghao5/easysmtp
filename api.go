@@ -5,7 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/yonomesh/easysmtp/common/conf"
 	"github.com/yonomesh/easysmtp/common/validator"
 	"github.com/yonomesh/easysmtp/internal"
 
@@ -13,7 +12,7 @@ import (
 )
 
 func EasySend(msg string) (err error) {
-	config := conf.Config{
+	config := Config{
 		SmtpServer: os.Getenv("EASYSMTP_SERVER"),
 		Sender:     os.Getenv("EASYSMTP_MAIL"),
 		Name:       os.Getenv("EASYSMTP_NAME"),
@@ -42,7 +41,7 @@ func EasySend(msg string) (err error) {
 }
 func SendMail(recipient string, cc []string, subject string, msg string) (err error) {
 
-	config := conf.Config{
+	config := Config{
 		SmtpServer: os.Getenv("EASYSMTP_SERVER"),
 		Sender:     os.Getenv("EASYSMTP_MAIL"),
 		Name:       os.Getenv("EASYSMTP_NAME"),
@@ -78,7 +77,7 @@ func SendMail(recipient string, cc []string, subject string, msg string) (err er
 }
 
 func Gmail(recipient string, cc []string, subject string, msg string) (err error) {
-	config := conf.Config{
+	config := Config{
 		SmtpServer: "smtp.gmail.com",
 		Sender:     os.Getenv("EASYSMTP_MAIL"),
 		Name:       os.Getenv("EASYSMTP_NAME"),
@@ -117,7 +116,7 @@ func Gmail(recipient string, cc []string, subject string, msg string) (err error
 }
 
 func Outlook(recipient string, cc []string, msg string, subject string) (err error) {
-	config := conf.Config{
+	config := Config{
 		SmtpServer: "smtp.office365.com",
 		Sender:     os.Getenv("EASYSMTP_MAIL"),
 		Name:       os.Getenv("EASYSMTP_NAME"),
@@ -156,7 +155,7 @@ func Outlook(recipient string, cc []string, msg string, subject string) (err err
 }
 
 func QQFoxmail(recipient string, cc []string, msg string, subject string) (err error) {
-	config := conf.Config{
+	config := Config{
 		SmtpServer: "smtp.qq.com",
 		Sender:     os.Getenv("EASYSMTP_MAIL"),
 		Name:       os.Getenv("EASYSMTP_NAME"),
@@ -194,13 +193,13 @@ func QQFoxmail(recipient string, cc []string, msg string, subject string) (err e
 	return nil
 }
 
-func Send(config conf.Config) (ret string, err error) {
+func Send(config Config) (err error) {
 	// sender
 	sender := ""
 	if validator.IsValidEmail(config.Sender) {
 		sender = config.Sender
 	} else {
-		return "", fmt.Errorf("invalid sender email: %s", config.Sender)
+		return fmt.Errorf("invalid sender email: %s", config.Sender)
 	}
 
 	// recipient
@@ -208,7 +207,7 @@ func Send(config conf.Config) (ret string, err error) {
 	if validator.IsValidEmail(config.Recipient) {
 		recipient = config.Recipient
 	} else {
-		return "", fmt.Errorf("invalid recipient email: %s", config.Recipient)
+		return fmt.Errorf("invalid recipient email: %s", config.Recipient)
 	}
 
 	// Cc
@@ -258,5 +257,5 @@ func Send(config conf.Config) (ret string, err error) {
 	} else {
 		fmt.Println("Send mail success!")
 	}
-	return "", nil
+	return nil
 }

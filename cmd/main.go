@@ -2,12 +2,11 @@ package main
 
 import (
 	"github.com/yonomesh/easysmtp"
-	"github.com/yonomesh/easysmtp/common/conf"
 )
 
 // It is a test
 func main() {
-	config := conf.Config{
+	config := easysmtp.Config{
 		SmtpServer: "",
 		Sender:     "",
 		Name:       "",
