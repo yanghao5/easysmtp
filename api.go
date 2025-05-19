@@ -5,11 +5,40 @@ import (
 	"easysmtp/common/validator"
 	"easysmtp/internal"
 	"fmt"
+	"os"
 	"strings"
 
 	netsmtp "net/smtp"
 )
 
+func EasySend(msg string) (err error) {
+	config := conf.Config{
+		SmtpServer: os.Getenv("EASYSMTP_SERVER"),
+		Sender:     os.Getenv("EASYSMTP_MAIL"),
+		Name:       os.Getenv("EASYSMTP_NAME"),
+		Passwd:     os.Getenv("EASYSMTP_PASSWD"),
+		Recipient:  os.Getenv("EASYSMTP_RECIPIENT_MAIL"),
+		CC:         []string{},
+		Subject:    "",
+		Msg:        msg,
+		EnableHTML: os.Getenv("EASYSMTP_ENABLE_HTML") == "true",
+	}
+
+	if config.SmtpServer == "" || config.Sender == "" || config.Passwd == "" || config.Recipient == "" {
+		return fmt.Errorf("missing required SMTP configuration environment variables")
+	}
+	if !validator.IsValidEmail(config.Sender) {
+		return fmt.Errorf("sender mail address is error")
+	}
+
+	if !validator.IsValidEmail(config.Recipient) {
+		return fmt.Errorf("recipient mail address is error")
+	}
+
+	Send(config)
+
+	return nil
+}
 func Send(config conf.Config) (ret string, err error) {
 	// sender
 	sender := ""
